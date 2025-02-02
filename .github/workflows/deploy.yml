@@ -23,10 +23,10 @@ jobs:
           corepack enable
           yarn set version stable
           yarn
-          yarn add -g @slidev/cli
+          yarn add @slidev/cli
 
       - name: Build Slides
-        run: slidev build --base secure-coding-pres
+        run: yarn slidev build --base secure-coding-pres
 
       - name: Deploy to GitHub Pages
         uses: JamesIves/github-pages-deploy-action@v4
