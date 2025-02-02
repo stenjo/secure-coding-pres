@@ -20,7 +20,7 @@ jobs:
 
       - name: Install Dependencies
         run: |
-          corePack enable
+          corepack enable
           yarn set version stable
           yarn
           yarn add -g @slidev/cli
