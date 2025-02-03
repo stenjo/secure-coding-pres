@@ -3,7 +3,7 @@
 theme: seriph
 # random image from a curated Unsplash collection by Anthony
 # like them? see https://unsplash.com/collections/94734566/slidev
-background: /images/Secure-Coding-Practices.jpg
+background: images/appsec-background.webp
 # some information about your slides (markdown enabled)
 title: Coding secure
 info: |
@@ -19,10 +19,17 @@ transition: slide-left
 mdc: true
 ---
 
-# Coding Secure
+<div class="absolute top-5">
+  <span class="font-700">
+    Sten Johnsen: 
+    Bouvet One - March 2025
+  </span>
+</div>
 
-Building Antifragile Applications through Secure Coding using Typescript
-
+<div class="absolute bottom-10">
+  <h1>Secure coding</h1>
+  <p>Building Antifragile Applications through Secure Coding using Typescript</p>
+</div>
 <!--
 The last comment block of each slide will be treated as slide notes. It will be visible and editable in Presenter Mode along with the slide. [Read more in the docs](https://sli.dev/guide/syntax.html#notes)
 -->
@@ -33,6 +40,16 @@ layout: image
 ---
 
 ![Little Bobby Tables](/images/exploits_of_a_mom_2x.png){ w-full h-auto }
+
+
+---
+layout: image-right
+image: images/sten.jpeg
+
+---
+
+# About me
+
 
 ---
 layout: two-cols-header
