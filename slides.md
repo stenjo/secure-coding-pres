@@ -43,27 +43,26 @@ layout: image
 
 
 ---
-layout: two-cols-header
+layout: default
 transition: slide-up
 
 ---
 
-# About me
+# Sten Johnsen
 
 A tech geek spending his work and spare time figuring out stuff involving electronics and software
-::left::
+
 
 - **Bouvet** - Since 2008, currently team-lead and (full-stack) developer
-
-- **Experience** - Graduated 1991 - B.Eng Microelectronic computer systems. Programming since my first real job - never looked back.
-- **Roles** - Programmer, project manager, program manager, department head, entrepreneur, agile coach and relationship counsellor
-- **Trainer** - DevOps certification courses, Agile, Scrum
-- **Busy with** - Quality of software and creating high performing teams
-
-::right::
-
 ![Sten](./images/Sten_Johnsen_6879.JPG) {width=200px margin=30px align=right}
 
+- **Experience** - Graduated 1991 - B.Eng Microelectronic computer systems. Programming since my first real job - never looked back.
+  
+- **Roles** - Programmer, project manager, program manager, department head, entrepreneur, agile coach and relationship counsellor
+
+- **Trainer** - DevOps certification courses, Agile, Scrum
+
+- **Busy with** - Quality of software and creating high performing teams
 
 ---
 layout: two-cols-header
