@@ -185,7 +185,14 @@ layout: center
 # Questions?
 
 ---
-layout: center
+---
+layout: fact
+
 ---
 
-# Thank You
+# Thank you!
+
+
+
+
+## ![Presentation](/images/QR.png) {width=150px margin=30px align=right}
