@@ -185,7 +185,6 @@ layout: center
 # Questions?
 
 ---
----
 layout: fact
 
 ---
