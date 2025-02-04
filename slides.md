@@ -43,33 +43,59 @@ layout: image
 
 
 ---
-layout: image-right
-image: images/sten.jpeg
+layout: two-cols-header
+transition: slide-up
 
 ---
 
 # About me
 
-
----
-layout: two-cols-header
-
----
-# Antifragile apllicatons
+A tech geek spending his work and spare time figuring out stuff involving electronics and software
 ::left::
 
-<arrow  x1="350" y1="310" x2="195" y2="334" color="#953" width="2" arrowSize="1" />
+- **Bouvet** - Since 2008, currently team-lead and (full-stack) developer
+
+- **Experience** - Graduated 1991 - B.Eng Microelectronic computer systems. Programming since my first real job - never looked back.
+- **Roles** - Programmer, project manager, program manager, department head, entrepreneur, agile coach and relationship counsellor
+- **Trainer** - DevOps certification courses, Agile, Scrum
+- **Busy with** - Quality of software and creating high performing teams
 
 ::right::
 
-Fragile:
-- performance reduces under stress
+![Sten](./images/Sten_Johnsen_6879.JPG) {width=200px margin=30px align=right}
 
-Robust:
+
+---
+layout: two-cols-header
+layoutClass: gap-16
+
+---
+# Antifragile apllicatons
+
+::left::
+
+```mermaid
+%%{init: { "themeVariables": { "xyChart": { "xAxisLabelColor\": \"transparent\", \"yAxisLabelColor\": \"transparent\" } } } }%%
+xychart-beta
+    title "Performance vs Stress"
+    x-axis "Stress"
+    y-axis "Performance"
+    line [5, 3, 0, -2, -4, -5]  %% Fragile curve (non-linear decline)
+    line [5, 5, 5, 5, 5, 5]  %% Robust curve (flat line)
+    line [5, 6, 8, 11, 15, 20]  %% Antifragile curve (non-linear growth)
+
+```
+
+::right::
+
+**Antifragile**
+- performance increases under increasing stress
+
+**Robust**
 - performance constant under increasing stress
 
-Antifragile:
-- performance increases under increasing stress
+**Fragile**
+- performance reduces under stress
 
 ---
 
@@ -145,7 +171,7 @@ const [formData, setFormData] = useState<FormData>({ name: "", email: "", age: 0
 ```
 
 ---
-layout: fact
+layout: quote
 
 ---
 # References
