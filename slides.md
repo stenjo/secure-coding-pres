@@ -3,7 +3,7 @@
 theme: seriph
 # random image from a curated Unsplash collection by Anthony
 # like them? see https://unsplash.com/collections/94734566/slidev
-background: /images/Secure-Coding-Practices.jpg
+background: images/appsec-background.webp
 # some information about your slides (markdown enabled)
 title: Coding secure
 info: |
@@ -19,10 +19,17 @@ transition: slide-left
 mdc: true
 ---
 
-# Coding Secure
+<div class="absolute top-5">
+  <span class="font-700">
+    Sten Johnsen: 
+    Bouvet One - March 2025
+  </span>
+</div>
 
-Building Antifragile Applications through Secure Coding using Typescript
-
+<div class="absolute bottom-10">
+  <h1>Secure coding</h1>
+  <p>Building Antifragile Applications through Secure Coding using Typescript</p>
+</div>
 <!--
 The last comment block of each slide will be treated as slide notes. It will be visible and editable in Presenter Mode along with the slide. [Read more in the docs](https://sli.dev/guide/syntax.html#notes)
 -->
@@ -34,8 +41,32 @@ layout: image
 
 ![Little Bobby Tables](/images/exploits_of_a_mom_2x.png){ w-full h-auto }
 
+
+---
+layout: default
+transition: slide-up
+
+---
+
+# Sten Johnsen
+
+A tech geek spending his work and spare time figuring out stuff involving electronics and software
+
+
+- **Bouvet** - Since 2008, currently team-lead and (full-stack) developer
+![Sten](./images/Sten_Johnsen_6879.JPG) {width=200px margin=30px align=right}
+
+- **Experience** - Graduated 1991 - B.Eng Microelectronic computer systems. Programming since my first real job - never looked back.
+  
+- **Roles** - Programmer, project manager, program manager, department head, entrepreneur, agile coach and relationship counsellor
+
+- **Trainer** - DevOps certification courses, Agile, Scrum
+
+- **Busy with** - Quality of software and creating high performing teams
+
 ---
 layout: two-cols-header
+layoutClass: gap-16
 
 ---
 # Antifragile applications
@@ -53,11 +84,8 @@ layout: two-cols-header
 ### Robust:
 - performance constant under increasing stress
 
-### Fragile:
+**Fragile**
 - performance reduces under stress
-
-Antifragile system: 
-  A system that increases performance as a function of stress 
 
 ---
 
@@ -415,6 +443,7 @@ export abstract class Guid {
 
 -->
 
+
 ---
 layout: fact
 
@@ -431,7 +460,8 @@ layout: center
 # Questions?
 
 ---
-layout: center
+layout: fact
+
 ---
 
 # Thank You
