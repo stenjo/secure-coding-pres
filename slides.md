@@ -38,21 +38,26 @@ layout: image
 layout: two-cols-header
 
 ---
-# Antifragile apllicatons
+# Antifragile applications
 ::left::
 
-<arrow  x1="350" y1="310" x2="195" y2="334" color="#953" width="2" arrowSize="1" />
+!['Fragile vs Antifragile'](/images/Fragile_Antifragile.png) { w-full h-auto }
 
 ::right::
 
-Fragile:
-- performance reduces under stress
 
-Robust:
+### Antifragile:
+- performance increases under increasing stress
+
+
+### Robust:
 - performance constant under increasing stress
 
-Antifragile:
-- performance increases under increasing stress
+### Fragile:
+- performance reduces under stress
+
+Antifragile system: 
+  A system that increases performance as a function of stress 
 
 ---
 
@@ -126,6 +131,289 @@ interface FormData {
 
 const [formData, setFormData] = useState<FormData>({ name: "", email: "", age: 0 });
 ```
+
+
+---
+transition: slide-up
+
+---
+
+# Handling input data from URL
+
+https:\//tubes.com/report?projectid=<span v-mark.underline.orange>c9b1e9b2-3f5d-4b1e-8b1e-9b2c9b1e9b2c</span>&pipeid=c9b1e9b2-3f5d-4b1e-8b1e-9b2c9b1e9b2c
+
+
+<div v-click>
+```ts
+export const getPipeReport = async (pipeId: string, projectId: string): Promise<any> => {
+    
+    const response = await axios.get(`/api/pipes/${projectId}/report?pipeId=${pipeId}`);
+    const data = response.data;
+    return data;
+};
+```
+</div>
+
+<!--
+  Alter projectId
+- sql injection
+- access to wrong project?
+- parameter list
+
+-->
+---
+
+# Security in depth 
+
+Improve security and quality
+
+````md magic-move {lines: true}
+```ts {*}
+const renderPipeReport = async () => {
+    const projectId = getFromUrl('projectId');
+    const pipeId = getFromUrl('pipeId');
+
+    const data = await getPipeData(projectId, pipeId);
+    // render the report
+}
+```
+
+```ts {*}
+const renderPipeReport = async () => {
+    const projectId: string = getFromUrl('projectId');
+    const pipeId: string = getFromUrl('pipeId');
+
+    const data = await getPipeData(projectId, pipeId);
+    // render the report
+}
+```
+
+```ts {*}
+
+type Guid = string;
+
+const renderPipeReport = async () => {
+    const projectId: Guid = getFromUrl('projectId');
+    const pipeId: Guid = getFromUrl('pipeId');
+
+    const data = await getPipeData(projectId, pipeId);
+    // render the report
+}
+```
+
+```ts {*}
+type Guid = string & { readonly __brand: unique symbol };;
+
+const renderPipeReport = async () => {
+    const projectId: Guid = getFromUrl('projectId');
+    const pipeId: Guid = getFromUrl('pipeId');
+
+    const data = await getPipeData(projectId, pipeId);
+    // render the report
+}
+```
+
+```ts {*}
+type Guid = string & { readonly __brand: unique symbol };;
+
+const renderPipeReport = async () => {
+    const projectId: Guid = getFromUrl('projectId') as Guid;
+    const pipeId: Guid = getFromUrl('pipeId') as Guid;
+
+    const data = await getPipeData(projectId, pipeId);
+    // render the report
+}
+```
+
+```ts {*}
+const renderPipeReport = async () => {
+    const projectId: Guid = new Guid(getFromUrl('projectId'));
+    const pipeId: Guid = new Guid(getFromUrl('pipeId'));
+
+    const data = await getPipeData(projectId, pipeId);
+    // render the report
+}
+```
+````
+
+<!--
+
+Using the parameters and passing it on to the api for fetching data. No type checking opens up for run-time errors and possibly invalid input 
+
+[click] Specifying primary type will to some extent ensure we are handling a string and not an array, object or any other type of data.
+
+- ✅ Explicit typing prevents unintended values.
+- ✅ Catches potential runtime errors at compile-time.
+- ✅ Ensures projectId always behaves like a string.
+
+[click] Defining Guid as a string means exactly that. They are treated the same. 
+No extra typechecking and no added safet althoug readability is improved as we can understand a Guid is expected.
+
+[click]
+Adding typechecking helps us make sure string and Guid is not interchanged. They are not treated the same.
+
+This way we ensure that if getFromUrl() returns a string, we will have a compile-time error. 
+
+[click]
+Solution then is often just doing an explisit cast, and getFromUrl() can return a strng again.
+
+Any validation of the type has to be done manually
+
+[click]
+Solution is defining a class
+
+-->
+
+---
+
+# Security in depth 
+
+```ts {*}
+const renderPipeReport = async () => {
+    const projectId: Guid = new Guid(getFromUrl('projectId'));
+    const pipeId: Guid = new Guid(getFromUrl('pipeId'));
+
+    const data = await getPipeData(projectId, pipeId);
+    // render the report
+}
+```
+
+Class implementation
+
+````md magic-move {lines: true}
+```ts {*}
+export class Guid {
+  protected value: string
+
+  constructor (value: string) {
+    this.value = value
+  }
+}
+```
+```ts {*}
+export class Guid {
+  protected value: string
+
+  constructor (value: string) {
+    this.value = value
+    this.validate();
+  }
+
+  private validate(): void {
+    const uuidRegex = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
+    if (!uuidRegex.test(this.value)) {
+        throw new Error(`Invalid GUID format: ${this.value}`);
+    }
+  }
+}
+```
+```ts {*}
+export class Guid {
+  protected value: string
+
+  protected constructor (value: string) {
+    this.value = value
+    this.validate();
+  }
+
+  public static create(value: string): Guid {
+      return new Guid(value);
+  }
+
+  private validate(): void {
+    const uuidRegex = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
+    if (!uuidRegex.test(this.value)) {
+        throw new Error(`Invalid GUID format: ${this.value}`);
+    }
+  }
+}
+```
+````    
+<!-- 
+Defining a class makes:
+- Even stronger typechecking
+- variable immutable
+- open up for additional validations
+
+[click]
+Adding a validation ensures that truly is Guid and adheres to the format requirements of a guid.
+
+[click]
+For even better encapsulation, define an explisit create method and keep the constructor protected
+
+-->
+---
+
+# Security in depth 
+
+```ts {*}
+const renderPipeReport = async () => {
+    const projectId: Guid = Guid.create(getFromUrl('projectId'));
+    const pipeId: Guid = Guid.create(getFromUrl('pipeId'));
+
+    const data = await getPipeData(projectId, pipeId);
+    // render the report
+}
+```
+
+Class implementation
+
+````md magic-move {lines: true}
+```ts {*}
+export class Guid {
+  protected value: string
+
+  protected constructor (value: string) {
+    this.value = value
+    this.validate();
+  }
+
+  public static create(value: string): Guid {
+      return new Guid(value);
+  }
+
+ ...
+}
+```
+````    
+<!-- 
+For even better encapsulation, define an explisit create method and keep the constructor protected
+
+-->
+---
+
+# Even stronger type checking
+
+```ts {*}
+const renderPipeReport = async () => {
+    const projectId: ProjectGuid = ProjectGuid.create(getFromUrl('projectId'))
+    const pipeId: PipeGuid = PipeGuid.create(getFromUrl('pipeId'));
+
+    const data = await getPipeData(projectId, pipeId);
+    // render the report
+}
+```
+```ts {*}
+export abstract class Guid {
+    protected constructor(value: string) {
+        super(value);
+        this.validate(); // ✅ Ensure validation is applied
+    }
+
+    protected validate(): void {
+    ...
+    }
+
+    public static create<T>(this: new (value: string) => T, value: string): T {
+        return new this(value);
+    }
+}
+```
+
+
+<!--
+
+-->
 
 ---
 layout: fact
