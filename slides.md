@@ -31,7 +31,9 @@ mdc: true
   <p>Building Antifragile Applications through Secure Coding using Typescript</p>
 </div>
 <!--
-The last comment block of each slide will be treated as slide notes. It will be visible and editable in Presenter Mode along with the slide. [Read more in the docs](https://sli.dev/guide/syntax.html#notes)
+
+These slides are prepared for Bouvet One use, but feel free to access, use and be inspired at any time
+
 -->
 
 ---
@@ -77,16 +79,23 @@ layoutClass: gap-16
 ::right::
 
 
-### Antifragile:
-- performance increases under increasing stress
+## Antifragile:
+- performance increases under increasing stres
 
-
-### Robust:
+## Robust:
 - performance constant under increasing stress
 
-**Fragile**
+## Fragile:
 - performance reduces under stress
 
+<!--
+Antifragility is when the system becomes stronger when more stress is applied. Our own body is an antifragile system. When we train, we actually are damaging the muscle cells a little, an our body rebuilds them but just a little stronger than they were.
+
+For an application or an IT system, stress is user load, unusual ways of using the application, hacking attempts, changing package versions and all the other stuff that might contribute to the system breaking down
+
+The 'healing' process is the routines, the practices, the speed and the general mindset in changing the system.
+
+-->
 ---
 
 
