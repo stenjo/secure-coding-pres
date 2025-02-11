@@ -56,7 +56,7 @@ A tech geek spending his work and spare time figuring out stuff involving electr
 
 
 - **Bouvet** - Since 2008, currently team-lead and (full-stack) developer
-![Sten](/images/Sten_Johnsen_6879.JPG) {width=200px margin=30px align=right}
+![Sten](/images/Sten_Johnsen_6879.JPG?url) {width=200px margin=30px align=right}
 
 - **Experience** - Graduated 1991 - B.Eng Microelectronic computer systems. Programming since my first real job - never looked back.
   
