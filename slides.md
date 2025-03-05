@@ -56,7 +56,7 @@ A tech geek spending his work and spare time figuring out stuff involving electr
 
 
 - **Bouvet** - Since 2008, currently team-lead and (full-stack) developer
-![Sten](./images/Sten_Johnsen_6879.JPG) {width=200px margin=30px align=right}
+![Sten](/images/Sten_Johnsen_6879.JPG?url) {width=200px margin=30px align=right}
 
 - **Experience** - Graduated 1991 - B.Eng Microelectronic computer systems. Programming since my first real job - never looked back.
   
@@ -65,6 +65,27 @@ A tech geek spending his work and spare time figuring out stuff involving electr
 - **Trainer** - DevOps certification courses, Agile, Scrum
 
 - **Busy with** - Quality of software and creating high performing teams
+
+---
+layout: two-cols-header
+
+---
+
+::left::
+![Antifragile](/images/default-oVU8aL0x-medium.jpg){ h-full w-auto }
+::right::
+
+# Antifragile
+## Things that Gain from Disorder
+Av Nassim Nicholas Taleb
+![Taleb](/images/nassim-nicholas-taleb-1221.jpg) {width=200px margin=30px align=right}
+
+Pocket 2013 Engelsk
+
+The antifragile is beyond the resilient or robust. The resil­ient resists shocks and stays the same; the antifragile gets better and better.
+Just as human bones get stronger when subjected to stress and tension, many things in life benefit from stress, disorder, volatility, and turmoil. What Taleb has identified and calls antifragile are things that not only gain from chaos but need it in order to survive and flourish.
+
+::center::
 
 ---
 layout: two-cols-header
@@ -121,8 +142,9 @@ Secure by Design teaches developers how to use design to drive security in softw
 
 ---
 layout: image-right
-image: public/images/Secure-Coding-Practices.jpg
+image: /images/Secure-Coding-Practices.jpg
 transition: slide-left
+
 ---
 
 # Traditional Application Security
@@ -140,6 +162,7 @@ transition: slide-left
 
 ---
 transition: slide-up
+
 ---
 
 # Sanitizing input
@@ -169,6 +192,18 @@ interface FormData {
 const [formData, setFormData] = useState<FormData>({ name: "", email: "", age: 0 });
 ```
 
+---
+transistion: slide-left
+layout: quote
+
+---
+
+# Domain Primitive
+
+##  ... a value object so strict in its definition that, if it exists, it'll also be valid. If its not valid, it can't exist.
+
+- Secure by Design, page 253
+
 
 ---
 transition: slide-up
@@ -192,10 +227,21 @@ export const getPipeReport = async (pipeId: string, projectId: string): Promise<
 </div>
 
 <!--
-  Alter projectId
+Consider a frontend url for rendering a report of a pipe of some sort.
+
+[click]
+Recognize the query string parameters projectId and pipeId. Typically represented as strings.
+
+[click]
+Translates to something like this backend call
+
+[click]
+Without security i mind - this could open up for:
+
 - sql injection
 - access to wrong project?
 - parameter list
+by alter projectId
 
 -->
 ---
