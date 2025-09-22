@@ -22,7 +22,7 @@ mdc: true
 <div class="absolute top-5">
   <span class="font-700">
     Sten Johnsen: 
-    Bouvet One - March 2025
+    HelloStavanger - October 2025
   </span>
 </div>
 
@@ -32,7 +32,7 @@ mdc: true
 </div>
 <!--
 
-These slides are prepared for Bouvet One use, but feel free to access, use and be inspired at any time
+These slides are prepared for HelloStavanger use, but feel free to access, use and be inspired at any time
 
 -->
 
@@ -66,6 +66,32 @@ A tech geek spending his work and spare time figuring out stuff involving electr
 
 - **Busy with** - Quality of software and creating high performing teams
 
+
+---
+layout: two-cols-header
+
+---
+
+# Topics of today
+
+::left::
+
+- Antifragility
+  
+- Perimeter security (input sanitation)
+  
+- Security in design
+
+::right::
+
+- Domain primitives
+  - What
+  - Why
+  - How (code examples)
+- some experiences and recommendations
+
+
+
 ---
 layout: two-cols-header
 
@@ -77,10 +103,10 @@ layout: two-cols-header
 
 # Antifragile
 ## Things that Gain from Disorder
-Av Nassim Nicholas Taleb
+By Nassim Nicholas Taleb
 ![Taleb](/images/nassim-nicholas-taleb-1221.jpg) {width=200px margin=30px align=right}
 
-Pocket 2013 Engelsk
+Pocket 2013 English
 
 The antifragile is beyond the resilient or robust. The resil­ient resists shocks and stays the same; the antifragile gets better and better.
 Just as human bones get stronger when subjected to stress and tension, many things in life benefit from stress, disorder, volatility, and turmoil. What Taleb has identified and calls antifragile are things that not only gain from chaos but need it in order to survive and flourish.
@@ -117,10 +143,6 @@ For an application or an IT system, stress is user load, unusual ways of using t
 The 'healing' process is the routines, the practices, the speed and the general mindset in changing the system.
 
 -->
----
-
-
-# Perimeter security
 
 
 ---
@@ -133,21 +155,37 @@ layout: two-cols-header
 # Secure by Design
 by Dan Johnsson, Daniel Sawano, Daniel Deogun
 
-Pocket 2019 Engelsk
+Pocket 2019 English
 
 Summary
 
 Secure by Design teaches developers how to use design to drive security in software development. This book is full of patterns, best practices, and mindsets that you can directly apply to your real world development. You''ll also learn to spot weaknesses in legacy code and how to address them.
 ::center::
 
+<!--
+
+Inspired by this book we decided to go for Domain Primitives as part of our secure architecture when building our next application
+
+-->
+
 ---
-layout: image-right
-image: /images/Secure-Coding-Practices.jpg
+
+# What are Domain primitives?
+
+Let's dive in and set the context
+
+
+
+---
+layout: two-cols-header
 transition: slide-left
 
 ---
-
 # Traditional Application Security
+
+Many ways of increasing and maintaining the security of the application
+
+::left::
 
 - Security in separate activities
     - Threat modelling
@@ -158,7 +196,11 @@ transition: slide-left
 
 - DevOps:
     "Build Quality in" -> "Build Security in"
+::right::
 
+![DevOps](/images/Devops-toolchain.svg.png)
+
+::center::
 
 ---
 transition: slide-up
@@ -192,6 +234,19 @@ interface FormData {
 const [formData, setFormData] = useState<FormData>({ name: "", email: "", age: 0 });
 ```
 
+<!--
+Consider some frequently used examples of input sanitation.
+
+first: input pattern validation in form. -> Can be bypassed by a simple form post
+
+Second: sanitizing functions. -> better, but has to be implemented for all inputs
+
+third: restricting the types of input -> tied to a specific form - other ways of inputing the same data?
+
+But the type restrictions can be made stronger!
+
+-->
+
 ---
 transistion: slide-left
 layout: quote
@@ -209,6 +264,7 @@ layout: quote
 transition: slide-up
 
 ---
+Practical example:
 
 # Handling input data from URL
 
@@ -224,6 +280,14 @@ export const getPipeReport = async (pipeId: string, projectId: string): Promise<
     return data;
 };
 ```
+</div>
+
+<div v-click>
+
+`guid`s are often used as lookup keys and some times used unsanitized in an SQL query!
+
+What could go wrong?
+
 </div>
 
 <!--
@@ -346,6 +410,9 @@ Any validation of the type has to be done manually
 Solution is defining a class
 
 -->
+
+---
+transition: none
 
 ---
 
