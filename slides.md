@@ -248,7 +248,7 @@ But the type restrictions can be made stronger!
 -->
 
 ---
-transition: slide-up
+transition: fade
 
 ---
 Practical example:
@@ -302,6 +302,7 @@ by alter projectId
 Improve security and quality
 
 ````md magic-move {lines: true}
+
 ```ts {*}
 const renderPipeReport = async () => {
     const projectId = getFromUrl('projectId');
@@ -398,87 +399,10 @@ Solution is defining a class
 
 -->
 
+
 ---
 transition: fade
 
----
-
-# Security in depth 
-
-```ts {*}
-const renderPipeReport = async () => {
-    const projectId: Guid = new Guid(getFromUrl('projectId'));
-    const pipeId: Guid = new Guid(getFromUrl('pipeId'));
-
-    const data = await getPipeData(projectId, pipeId);
-    // render the report
-}
-```
-
-Class implementation
-
-````md magic-move {lines: true}
-```ts {*}
-export class Guid {
-  protected value: string
-
-  constructor (value: string) {
-    this.value = value
-  }
-}
-```
-```ts {*}
-export class Guid {
-  protected value: string
-
-  constructor (value: string) {
-    this.value = value
-    this.validate();
-  }
-
-  private validate(): void {
-    const uuidRegex = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
-    if (!uuidRegex.test(this.value)) {
-        throw new Error(`Invalid GUID format: ${this.value}`);
-    }
-  }
-}
-```
-```ts {*}
-export class Guid {
-  protected value: string
-
-  protected constructor (value: string) {
-    this.value = value
-    this.validate();
-  }
-
-  public static create(value: string): Guid {
-      return new Guid(value);
-  }
-
-  private validate(): void {
-    const uuidRegex = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
-    if (!uuidRegex.test(this.value)) {
-        throw new Error(`Invalid GUID format: ${this.value}`);
-    }
-  }
-}
-```
-````    
-<!-- 
-Defining a class makes:
-- Even stronger typechecking
-- variable immutable
-- open up for additional validations
-
-[click]
-Adding a validation ensures that truly is Guid and adheres to the format requirements of a guid.
-
-[click]
-For even better encapsulation, define an explisit create (factory) method and keep the constructor protected
-
--->
 ---
 
 # Security in depth 
@@ -561,31 +485,38 @@ layout: two-cols-header
 
 ::left::
 
+<div v-click>
+
 ### Type Safety
 
 Makes intent explicit. In a function call with two or more parameters, you can't pass `projectId` and `pipeId` in the wrong order.
+
+</div>
+
+<br/>
+<div v-click>
 
 ### Validation at boundaries
 
 Single-source-of-truth on what is valid data.
 
-### Consistency (across systemd)
-
-Prevents duplication and inconsistent behaviour 
-across services. Same code used both in frontend and backend.
-
-### Testability
-
-A primitive is isolated and testing behaviour (validation, conversion, comparison) independantly is easy.
+</div>
 
 
 ::right::
+
+<div v-click>
 
 ### Self-documenting code
 
 It's easy to see what type of data the variable contains.
 
-## Domain logic
+</div>
+<br/>
+
+<div v-click>
+
+### Domain logic
 
 Domain rules and logic can live inside the primitive, I.e. 
 ```ts 
@@ -593,11 +524,195 @@ myId.equals(someOtherId);
 ``` 
 checks both the actual value and the type.
 
+</div>
+
+::bottom::
+
+---
+layout: two-cols-header
+
+---
+
+# Why Domain Primitives? (2)
+
+::left::
+
+<div v-click>
+
+### Consistency (across systemd)
+
+Prevents duplication and inconsistent behaviour 
+<br/>
+across services. Same code used both in frontend 
+<br/>
+and backend.
+
+</div>
+
+<br/>
+
+<div v-click>
+
+### Testability
+
+A primitive is isolated and testing behaviour (validation, conversion, comparison) 
+<br/>
+independantly is easy.
+
+</div>
+
+<br/>
+::right::
+
+<div v-click>
+
 ## Refactoring safety
 
 If you decide to make all guids lowercase, you only need to do this in one place - not everywhere
 
+</div>
+
+<br/>
+
+
+<div v-click>
+
+### Integration with richer patterns
+
+Combines well with DDD concepts like Entites, Value Objects and Aggregates. Keeps things focused and reduces bugs
+
+</div>
+
+<br/>
 ::bottom::
+
+---
+
+
+# Pitfalls
+
+### 1. Compile-time safety, zero runtime safety
+ 
+| **Pitfall:** | Protection only at compile time. Invalid data can still enter.|
+|---------------|-----------------------|
+| **Mitigate:** | Always validate at boundaries (DTO → domain). <br/>Keep `create()` (throws) and `tryCreate()` (safe) factories and use them consistently.|
+
+<br/>
+
+### 2. “Primitive proliferation” and ceremony
+
+|**Pitfall:** | Making a primitive for everything explodes the type count and boilerplate, slowing teams down.|
+|---------------|-----------------------|
+|**Mitigate:** | Create primitives only where rules/meaning matter (IDs, money, percentages, time, email, URLs). Use plain types for purely mechanical values.|
+
+
+---
+
+
+# Pitfalls
+
+### 3. Interop friction (ORMs, libs, React forms)
+
+| **Pitfall:** | ORMs (e.g., Prisma), UI components, and utility libs expect plain primitives. Wrapping/unwrapping everywhere becomes noisy.|
+|---------------|-----------------------|
+| **Mitigate:** | Centralize mappers: <br/> DB: fromRecord(record) -> domain, toRecord(domain) -> primitives <br/> API: DTO ↔ Domain adapters <br/> UI: Keep form state primitive; convert on submit|
+
+### 4. Runtime equality and object identity
+
+| **Pitfall:** | If you use classes, instanceof can break across package boundaries or double-bundles; object identity can differ even for equal values.|
+|---------------|-----------------------|
+| **Mitigate:** | Prefer value equality (a.value === b.value). If you expose equals, implement it by value, not by reference/constructor checks.|
+
+
+
+5) Casting around the brand
+
+Pitfall: as any or sloppy casts erase the safety you introduced.
+Mitigate: Ban unsafe casts in reviews/linters. Make factories the only way in. Consider eslint rules to forbid as unknown as.
+
+6) Error-handling strategy mismatch
+
+Pitfall: Throwing in create leaks exceptions into hot paths; returning undefined hides errors.
+Mitigate: Offer both:
+
+create() (throws) for tests/internal invariants
+
+tryCreate() (returns T | undefined or Result) for boundaries
+Pick one per layer and be consistent.
+
+::right::
+
+7) Over-rich primitives (God objects)
+
+Pitfall: Packing lots of behavior into a primitive turns it into a mini-domain with hidden dependencies and test pain.
+Mitigate: Keep primitives small, pure, immutable and side-effect free. Put integration logic in services.
+
+8) Performance & bundle size
+
+Pitfall: Class wrappers allocate objects, which can add GC pressure in tight loops; extra code can bloat bundles.
+Mitigate: For hot paths, use branded types (type-only) instead of class wrappers; keep methods as pure functions over the raw value.
+
+--- 
+layout: two-cols-header
+
+---
+
+# Pitfalls (2)
+
+::left::
+
+9) Serialization surprises
+
+Pitfall: JSON.stringify() on class instances may include fields you didn’t intend—or strip brands entirely.
+Mitigate: Ensure primitives implement toJSON() that returns the inner value. On the wire, keep DTOs primitive.
+
+10) Multiple source-of-truths for validation
+
+Pitfall: Zod/Yup schemas + primitive factories + DB constraints can drift.
+Mitigate: Choose a single canonical definition and derive others:
+
+Either validate in the primitive factory and call it from Zod transforms,
+
+Or define a Zod schema and call that inside the factory.
+
+::right::
+
+11) Time & money are hard
+
+Pitfall: Date and number for money/time cause rounding/timezone bugs.
+Mitigate: Use proper primitives with explicit units and conversions: Money (minor units + currency), UtcDateTime/LocalDate, DurationMs, etc. Enforce rounding rules inside.
+
+12) Test overhead
+
+Pitfall: Every primitive adds fixtures/mocks and increases test churn.
+Mitigate: Provide test helpers (validGuid(), email()), and property-based tests for core primitives to cover many cases once.
+
+--- 
+layout: two-cols-header
+
+---
+
+# Pitfalls (3)
+
+::left::
+
+13) Leaking primitives across service boundaries
+
+Pitfall: Sharing primitive classes across packages/services can cause instanceof mismatches and version conflicts.
+Mitigate: Share types (brands) via a thin package, not classes. At boundaries, exchange plain JSON and reconstruct locally.
+
+14) Confusing Entities vs Primitives
+
+Pitfall: Using a primitive where you need identity or lifecycle (e.g., UserId vs User).
+Mitigate: Keep primitives for immutable value semantics. Use Entities/Aggregates for identity and behavior that changes over time.
+
+::right::
+
+15) Migration pain
+
+Pitfall: Changing a primitive’s rules (e.g., email normalization) can break persistence, caches, and equality logic.
+Mitigate: Version your primitives when rules change (e.g., EmailV2) and add migration adapters.
+
 
 ---
 
