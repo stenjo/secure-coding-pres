@@ -412,7 +412,7 @@ Solution is defining a class
 -->
 
 ---
-transition: none
+transition: fade
 
 ---
 
@@ -489,7 +489,7 @@ Defining a class makes:
 Adding a validation ensures that truly is Guid and adheres to the format requirements of a guid.
 
 [click]
-For even better encapsulation, define an explisit create method and keep the constructor protected
+For even better encapsulation, define an explisit create (factory) method and keep the constructor protected
 
 -->
 ---
@@ -565,6 +565,61 @@ export abstract class Guid {
 
 -->
 
+---
+layout: two-cols-header
+
+---
+
+# Why Domain Primitives?
+
+::left::
+
+### Type Safety
+
+Makes intent explicit. In a function call with two or more parameters, you can't pass `projectId` and `pipeId` in the wrong order.
+
+### Validation at boundaries
+
+Single-source-of-truth on what is valid data.
+
+### Consistency (across systemd)
+
+Prevents duplication and inconsistent behaviour 
+across services. Same code used both in frontend and backend.
+
+### Testability
+
+A primitive is isolated and testing behaviour (validation, conversion, comparison) independantly is easy.
+
+
+::right::
+
+### Self-documenting code
+
+It's easy to see what type of data the variable contains.
+
+## Domain logic
+
+Domain rules and logic can live inside the primitive, I.e. 
+```ts 
+myId.equals(someOtherId); 
+``` 
+checks both the actual value and the type.
+
+## Refactoring safety
+
+If you decide to make all guids lowercase, you only need to do this in one place - not everywhere
+
+::bottom::
+
+---
+
+# What we learned
+
+- Always catch your exceptions
+- Make your domain primitive easy to use
+- Be strict when reviewing
+- 
 
 ---
 layout: fact
