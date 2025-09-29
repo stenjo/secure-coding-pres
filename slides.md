@@ -248,19 +248,6 @@ But the type restrictions can be made stronger!
 -->
 
 ---
-transistion: slide-left
-layout: quote
-
----
-
-# Domain Primitive
-
-##  ... a value object so strict in its definition that, if it exists, it'll also be valid. If its not valid, it can't exist.
-
-- Secure by Design, page 253
-
-
----
 transition: slide-up
 
 ---
@@ -327,7 +314,7 @@ const renderPipeReport = async () => {
 
 ```ts {*}
 const renderPipeReport = async () => {
-    const projectId: string = getFromUrl('projectId');
+  const projectId: string = getFromUrl('projectId');
     const pipeId: string = getFromUrl('pipeId');
 
     const data = await getPipeData(projectId, pipeId);
@@ -340,7 +327,7 @@ const renderPipeReport = async () => {
 type Guid = string;
 
 const renderPipeReport = async () => {
-    const projectId: Guid = getFromUrl('projectId');
+  const projectId: Guid = getFromUrl('projectId');
     const pipeId: Guid = getFromUrl('pipeId');
 
     const data = await getPipeData(projectId, pipeId);
@@ -352,7 +339,7 @@ const renderPipeReport = async () => {
 type Guid = string & { readonly __brand: unique symbol };;
 
 const renderPipeReport = async () => {
-    const projectId: Guid = getFromUrl('projectId');
+  const projectId: Guid = getFromUrl('projectId');
     const pipeId: Guid = getFromUrl('pipeId');
 
     const data = await getPipeData(projectId, pipeId);
@@ -364,7 +351,7 @@ const renderPipeReport = async () => {
 type Guid = string & { readonly __brand: unique symbol };;
 
 const renderPipeReport = async () => {
-    const projectId: Guid = getFromUrl('projectId') as Guid;
+  const projectId: Guid = getFromUrl('projectId') as Guid;
     const pipeId: Guid = getFromUrl('pipeId') as Guid;
 
     const data = await getPipeData(projectId, pipeId);
@@ -374,7 +361,7 @@ const renderPipeReport = async () => {
 
 ```ts {*}
 const renderPipeReport = async () => {
-    const projectId: Guid = new Guid(getFromUrl('projectId'));
+  const projectId: Guid = new Guid(getFromUrl('projectId'));
     const pipeId: Guid = new Guid(getFromUrl('pipeId'));
 
     const data = await getPipeData(projectId, pipeId);
@@ -498,7 +485,7 @@ For even better encapsulation, define an explisit create (factory) method and ke
 
 ```ts {*}
 const renderPipeReport = async () => {
-    const projectId: Guid = Guid.create(getFromUrl('projectId'));
+  const projectId: Guid = Guid.create(getFromUrl('projectId'));
     const pipeId: Guid = Guid.create(getFromUrl('pipeId'));
 
     const data = await getPipeData(projectId, pipeId);
@@ -519,7 +506,7 @@ export class Guid {
   }
 
   public static create(value: string): Guid {
-      return new Guid(value);
+    return new Guid(value);
   }
 
  ...
@@ -536,7 +523,7 @@ For even better encapsulation, define an explisit create method and keep the con
 
 ```ts {*}
 const renderPipeReport = async () => {
-    const projectId: ProjectGuid = ProjectGuid.create(getFromUrl('projectId'))
+  const projectId: ProjectGuid = ProjectGuid.create(getFromUrl('projectId'))
     const pipeId: PipeGuid = PipeGuid.create(getFromUrl('pipeId'));
 
     const data = await getPipeData(projectId, pipeId);
@@ -545,17 +532,17 @@ const renderPipeReport = async () => {
 ```
 ```ts {*}
 export abstract class Guid {
-    protected constructor(value: string) {
-        super(value);
+  protected constructor(value: string) {
+    super(value);
         this.validate(); // ✅ Ensure validation is applied
     }
 
     protected validate(): void {
-    ...
+      ...
     }
 
     public static create<T>(this: new (value: string) => T, value: string): T {
-        return new this(value);
+      return new this(value);
     }
 }
 ```
