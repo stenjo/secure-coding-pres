@@ -76,19 +76,35 @@ layout: two-cols-header
 
 ::left::
 
-- Antifragility
+## Antifragility
+
+<br/>
+
+## Perimeter security <br/>(input sanitation)
   
-- Perimeter security (input sanitation)
+<br/>
   
-- Security in design
+## Security in design
 
 ::right::
 
-- Domain primitives
-  - What
-  - Why
-  - How (code examples)
-- some experiences and recommendations
+## Domain primitives
+
+<br/>
+  
+-  ### What
+
+<br/>
+  
+-  ### Why
+
+<br/>
+  
+-  ### How (code examples)
+
+<br/>
+  
+## some experiences and recommendations
 
 
 
@@ -187,14 +203,19 @@ Many ways of increasing and maintaining the security of the application
 
 ::left::
 
-- Security in separate activities
-    - Threat modelling
-    - Penetration tests
-    - Security review
-    - SAST
-    - DAST
+## Security in separate activities
+ 
+- Threat modelling
 
-- DevOps:
+- Penetration tests
+
+- Security review
+
+- SAST
+
+- DAST
+
+## DevOps:
     "Build Quality in" -> "Build Security in"
 ::right::
 
@@ -202,6 +223,21 @@ Many ways of increasing and maintaining the security of the application
 
 ::center::
 
+<!--
+Even in DevOps we teach that security often is particular activities like 
+- Threat modelling
+- Penetration tests
+- Security reviews
+- Static application security tests
+- Dynamic application security test
+
+All these activities are good and needed but if we do not keep an architecture helping us maintain and improve security, we end up with a fragile - or at best - a robust application.
+
+We aim higher than that!
+
+Our understanding of "build Quality in" is, among other things, a good architecture.
+
+-->
 ---
 transition: slide-up
 
@@ -260,7 +296,7 @@ https:\//tubes.com/report?projectid=<span v-mark.underline.orange>c9b1e9b2-3f5d-
 
 <div v-click>
 ```ts
-export const getPipeReport = async (pipeId: string, projectId: string): Promise<any> => {
+export const getPipeData = async (pipeId: string, projectId: string): Promise<any> => {
     
     const response = await axios.get(`/api/pipes/${projectId}/report?pipeId=${pipeId}`);
     const data = response.data;
@@ -375,6 +411,8 @@ const renderPipeReport = async () => {
 
 Using the parameters and passing it on to the api for fetching data. No type checking opens up for run-time errors and possibly invalid input 
 
+- Did you notice that getPipeData() call has swapped parameters?
+
 [click] Specifying primary type will to some extent ensure we are handling a string and not an array, object or any other type of data.
 
 - ✅ Explicit typing prevents unintended values.
@@ -390,7 +428,7 @@ Adding typechecking helps us make sure string and Guid is not interchanged. They
 This way we ensure that if getFromUrl() returns a string, we will have a compile-time error. 
 
 [click]
-Solution then is often just doing an explisit cast, and getFromUrl() can return a strng again.
+Solution then is often just doing an explisit cast, and getFromUrl() can return a string again.
 
 Any validation of the type has to be done manually
 
@@ -474,10 +512,16 @@ export abstract class Guid {
 
 <!--
 
+Making Guid an abstract class enables us to create domain primitives that are not interchangeable
+and may help us keep the parameter orders intact.
+
+Swapping places of `pipeId` and `projectId` now, would create a linting error!
+
 -->
 
 ---
 layout: two-cols-header
+transition: fade
 
 ---
 
@@ -528,6 +572,17 @@ checks both the actual value and the type.
 
 ::bottom::
 
+<!--
+
+[click] obvious
+
+[click] obvious
+
+[click] obvious
+ 
+[click] We like to use domain primitives as part of our data models, where conversion to and from json is encapsulated.
+-->
+
 ---
 layout: two-cols-header
 
@@ -539,12 +594,13 @@ layout: two-cols-header
 
 <div v-click>
 
-### Consistency (across systemd)
+### Consistency (across systems)
 
 Prevents duplication and inconsistent behaviour 
 <br/>
-across services. Same code used both in frontend 
+across services. 
 <br/>
+Same code used both in frontend 
 and backend.
 
 </div>
@@ -586,10 +642,24 @@ Combines well with DDD concepts like Entites, Value Objects and Aggregates. Keep
 <br/>
 ::bottom::
 
+<!--
+
+[click] Using the same code makes sure we have the same data
+
+[click] The data object will not exist unless it validates. 
+
+[click] obvious
+ 
+[click] Encapsulation keeps things tidy and easy to test
+-->
+
 ---
 
-
 # Pitfalls
+
+<br/>
+
+<div v-click>
 
 ### 1. Compile-time safety, zero runtime safety
  
@@ -597,7 +667,11 @@ Combines well with DDD concepts like Entites, Value Objects and Aggregates. Keep
 |---------------|-----------------------|
 | **Mitigate:** | Always validate at boundaries (DTO → domain). <br/>Keep `create()` (throws) and `tryCreate()` (safe) factories and use them consistently.|
 
+</div>
+
 <br/>
+
+<div v-click>
 
 ### 2. “Primitive proliferation” and ceremony
 
@@ -605,123 +679,93 @@ Combines well with DDD concepts like Entites, Value Objects and Aggregates. Keep
 |---------------|-----------------------|
 |**Mitigate:** | Create primitives only where rules/meaning matter (IDs, money, percentages, time, email, URLs). Use plain types for purely mechanical values.|
 
+</div>
+
+<!--
+Are there pitfalls? Yes indeed!
+
+I'll let you know about our top 4.
+
+[click]
+Domain primitives are brilliant as a detector of possible bugs. Make sure to handle run-time data errors in a proper way. Don't let your application crash because an object property was null when your validation expects it not to be.
+
+[click]
+Keep an eye on the benefits of creating a domain primitive. Some times as number is just a number and might not need any particular validation. Use data types to your benefit on the level that suits the need.
+
+-->
 
 ---
 
 
 # Pitfalls
 
-### 3. Interop friction (ORMs, libs, React forms)
+<br/>
 
-| **Pitfall:** | ORMs (e.g., Prisma), UI components, and utility libs expect plain primitives. Wrapping/unwrapping everywhere becomes noisy.|
+<div v-click>
+
+### 3. Error-handling strategy mismatch
+
+| **Pitfall:** | Throwing in create leaks exceptions into hot paths; returning undefined hides errors.|
 |---------------|-----------------------|
-| **Mitigate:** | Centralize mappers: <br/> DB: fromRecord(record) -> domain, toRecord(domain) -> primitives <br/> API: DTO ↔ Domain adapters <br/> UI: Keep form state primitive; convert on submit|
+| **Mitigate:** | Offer both:<br/>`create()` (throws) for tests/internal invariants<br/>`tryCreate()` (returns T \| undefined \| Result) for boundaries<br/>Pick one per layer and be consistent.|
 
-### 4. Runtime equality and object identity
+</div>
 
-| **Pitfall:** | If you use classes, instanceof can break across package boundaries or double-bundles; object identity can differ even for equal values.|
+<br/>
+
+<div v-click>
+
+### 4. Test overhead
+
+| **Pitfall:** | Every primitive adds fixtures/mocks and increases test churn.|
 |---------------|-----------------------|
-| **Mitigate:** | Prefer value equality (a.value === b.value). If you expose equals, implement it by value, not by reference/constructor checks.|
+| **Mitigate:** |Provide test helpers (validGuid(), email()), and property-based tests for core primitives to cover many cases once.|
 
+</div>
 
-
-5) Casting around the brand
-
-Pitfall: as any or sloppy casts erase the safety you introduced.
-Mitigate: Ban unsafe casts in reviews/linters. Make factories the only way in. Consider eslint rules to forbid as unknown as.
-
-6) Error-handling strategy mismatch
-
-Pitfall: Throwing in create leaks exceptions into hot paths; returning undefined hides errors.
-Mitigate: Offer both:
-
-create() (throws) for tests/internal invariants
-
-tryCreate() (returns T | undefined or Result) for boundaries
-Pick one per layer and be consistent.
-
-::right::
-
-7) Over-rich primitives (God objects)
-
-Pitfall: Packing lots of behavior into a primitive turns it into a mini-domain with hidden dependencies and test pain.
-Mitigate: Keep primitives small, pure, immutable and side-effect free. Put integration logic in services.
-
-8) Performance & bundle size
-
-Pitfall: Class wrappers allocate objects, which can add GC pressure in tight loops; extra code can bloat bundles.
-Mitigate: For hot paths, use branded types (type-only) instead of class wrappers; keep methods as pure functions over the raw value.
-
---- 
-layout: two-cols-header
 
 ---
-
-# Pitfalls (2)
-
-::left::
-
-9) Serialization surprises
-
-Pitfall: JSON.stringify() on class instances may include fields you didn’t intend—or strip brands entirely.
-Mitigate: Ensure primitives implement toJSON() that returns the inner value. On the wire, keep DTOs primitive.
-
-10) Multiple source-of-truths for validation
-
-Pitfall: Zod/Yup schemas + primitive factories + DB constraints can drift.
-Mitigate: Choose a single canonical definition and derive others:
-
-Either validate in the primitive factory and call it from Zod transforms,
-
-Or define a Zod schema and call that inside the factory.
-
-::right::
-
-11) Time & money are hard
-
-Pitfall: Date and number for money/time cause rounding/timezone bugs.
-Mitigate: Use proper primitives with explicit units and conversions: Money (minor units + currency), UtcDateTime/LocalDate, DurationMs, etc. Enforce rounding rules inside.
-
-12) Test overhead
-
-Pitfall: Every primitive adds fixtures/mocks and increases test churn.
-Mitigate: Provide test helpers (validGuid(), email()), and property-based tests for core primitives to cover many cases once.
-
---- 
 layout: two-cols-header
-
----
-
-# Pitfalls (3)
-
-::left::
-
-13) Leaking primitives across service boundaries
-
-Pitfall: Sharing primitive classes across packages/services can cause instanceof mismatches and version conflicts.
-Mitigate: Share types (brands) via a thin package, not classes. At boundaries, exchange plain JSON and reconstruct locally.
-
-14) Confusing Entities vs Primitives
-
-Pitfall: Using a primitive where you need identity or lifecycle (e.g., UserId vs User).
-Mitigate: Keep primitives for immutable value semantics. Use Entities/Aggregates for identity and behavior that changes over time.
-
-::right::
-
-15) Migration pain
-
-Pitfall: Changing a primitive’s rules (e.g., email normalization) can break persistence, caches, and equality logic.
-Mitigate: Version your primitives when rules change (e.g., EmailV2) and add migration adapters.
-
+transition: fade
 
 ---
 
 # What we learned
 
-- Always catch your exceptions
-- Make your domain primitive easy to use
-- Be strict when reviewing
-- 
+
+::left::
+
+<div v-click>
+
+- ## Always catch your exceptions
+
+</div>
+
+<br/>
+
+<div v-click>
+
+- ## Make your domain primitive easy to use
+
+</div>
+
+::right::
+
+<div v-click>
+
+- ## Be strict when reviewing
+
+</div>
+
+<br/>
+
+<div v-click>
+
+- ## Use any bugs to make your application stronger
+
+</div>
+::bottom::
+
 
 ---
 layout: fact
@@ -744,3 +788,4 @@ layout: fact
 ---
 
 # Thank You
+
