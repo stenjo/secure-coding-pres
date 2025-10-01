@@ -26,22 +26,20 @@ mdc: true
   </span>
 </div>
 
+![Little Bobby Tables](/images/exploits_of_a_mom_2x.png){ w-full h-auto }
+
+<br/>
+
 <div class="absolute bottom-10">
   <h1>Secure coding</h1>
   <p>Building Antifragile Applications through Secure Coding using Typescript</p>
 </div>
+
 <!--
 
 These slides are prepared for HelloStavanger use, but feel free to access, use and be inspired at any time
 
 -->
-
----
-transition: fade-out
-layout: image
----
-
-![Little Bobby Tables](/images/exploits_of_a_mom_2x.png){ w-full h-auto }
 
 
 ---
@@ -134,7 +132,9 @@ layout: two-cols-header
 layoutClass: gap-16
 
 ---
+
 # Antifragile applications
+
 ::left::
 
 !['Fragile vs Antifragile'](/images/Fragile_Antifragile.png) { w-full h-auto }
@@ -197,6 +197,7 @@ layout: two-cols-header
 transition: slide-left
 
 ---
+
 # Traditional Application Security
 
 Many ways of increasing and maintaining the security of the application
@@ -224,7 +225,7 @@ Many ways of increasing and maintaining the security of the application
 ::center::
 
 <!--
-Even in DevOps we teach that security often is particular activities like 
+Even in DevOps we teach that security often are particular activities like 
 - Threat modelling
 - Penetration tests
 - Security reviews
@@ -295,13 +296,17 @@ https:\//tubes.com/report?projectid=<span v-mark.underline.orange>c9b1e9b2-3f5d-
 
 
 <div v-click>
+
 ```ts
+
+// api
+
 export const getPipeData = async (pipeId: string, projectId: string): Promise<any> => {
     
     const response = await axios.get(`/api/pipes/${projectId}/report?pipeId=${pipeId}`);
-    const data = response.data;
-    return data;
+    return response.data;
 };
+
 ```
 </div>
 
@@ -314,21 +319,26 @@ What could go wrong?
 </div>
 
 <!--
+
 Consider a frontend url for rendering a report of a pipe of some sort.
 
 [click]
-Recognize the query string parameters projectId and pipeId. Typically represented as strings.
+Recognize the query string parameters `projectId` and `pipeId`. Typically represented as strings.
 
 [click]
-Translates to something like this backend call
+Translates to something like this api/backend call
 
 [click]
 Without security i mind - this could open up for:
 
 - sql injection
 - access to wrong project?
-- parameter list
-by alter projectId
+- X site scripting
+- IDOR (Insecure Direct Onbject Reference) -> authentication bypassing
+- duplicate keys
+- business logic abuse
+
+by altering the projectId
 
 -->
 ---
@@ -409,7 +419,9 @@ const renderPipeReport = async () => {
 
 <!--
 
-Using the parameters and passing it on to the api for fetching data. No type checking opens up for run-time errors and possibly invalid input 
+When rendering the report we are using the parameters and passing them on to the api for fetching data. 
+
+Without type checking this opens up for run-time errors and possibly invalid input 
 
 - Did you notice that getPipeData() call has swapped parameters?
 
@@ -420,7 +432,7 @@ Using the parameters and passing it on to the api for fetching data. No type che
 - ✅ Ensures projectId always behaves like a string.
 
 [click] Defining Guid as a string means exactly that. They are treated the same. 
-No extra typechecking and no added safet althoug readability is improved as we can understand a Guid is expected.
+No extra typechecking and no added safety although readability is improved as we can understand a Guid is expected.
 
 [click]
 Adding typechecking helps us make sure string and Guid is not interchanged. They are not treated the same.
@@ -789,3 +801,5 @@ layout: fact
 
 # Thank You
 
+
+## ![Presentation](/images/QR.png) {width=300px margin=30px align=right}
