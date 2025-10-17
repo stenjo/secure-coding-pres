@@ -36,16 +36,14 @@ mdc: true
 </div>
 
 <!--
-
 These slides are prepared for HelloStavanger use, but feel free to access, use and be inspired at any time
 
+This cartoon is a famous one by xkcd, that have stuck with me, reminding me of how important input sanitation is.
 -->
-
 
 ---
 layout: default
 transition: slide-up
-
 ---
 
 # Sten Johnsen
@@ -64,6 +62,10 @@ A tech geek spending his work and spare time figuring out stuff involving electr
 
 - **Busy with** - Quality of software and creating high performing teams
 
+<!--
+Have been a programmer for a long time and working with software even longer when including roles as project manager and other management position.
+Busy with the quality aspects of software
+-->
 
 ---
 layout: two-cols-header
@@ -108,7 +110,6 @@ layout: two-cols-header
 
 ---
 layout: two-cols-header
-
 ---
 
 ::left::
@@ -126,6 +127,12 @@ The antifragile is beyond the resilient or robust. The resil­ient resists shock
 Just as human bones get stronger when subjected to stress and tension, many things in life benefit from stress, disorder, volatility, and turmoil. What Taleb has identified and calls antifragile are things that not only gain from chaos but need it in order to survive and flourish.
 
 ::center::
+
+<!--
+Introducing Antfragility:
+
+First coined by Taleb in this book from 2013.
+-->
 
 ---
 layout: two-cols-header
@@ -159,37 +166,6 @@ For an application or an IT system, stress is user load, unusual ways of using t
 The 'healing' process is the routines, the practices, the speed and the general mindset in changing the system.
 
 -->
-
-
----
-layout: two-cols-header
----
-
-::left::
-![Secure by Design](/images/default-h1PakPUs-medium.jpg){ h-full w-auto }
-::right::
-# Secure by Design
-by Dan Johnsson, Daniel Sawano, Daniel Deogun
-
-Pocket 2019 English
-
-Summary
-
-Secure by Design teaches developers how to use design to drive security in software development. This book is full of patterns, best practices, and mindsets that you can directly apply to your real world development. You''ll also learn to spot weaknesses in legacy code and how to address them.
-::center::
-
-<!--
-
-Inspired by this book we decided to go for Domain Primitives as part of our secure architecture when building our next application
-
--->
-
----
-
-# What are Domain primitives?
-
-Let's dive in and set the context
-
 
 
 ---
@@ -239,6 +215,38 @@ We aim higher than that!
 Our understanding of "build Quality in" is, among other things, a good architecture.
 
 -->
+
+---
+layout: two-cols-header
+---
+
+::left::
+![Secure by Design](/images/default-h1PakPUs-medium.jpg){ h-full w-auto }
+::right::
+# Secure by Design
+by Dan Johnsson, Daniel Sawano, Daniel Deogun
+
+Pocket 2019 English
+
+Summary
+
+Secure by Design teaches developers how to use design to drive security in software development. This book is full of patterns, best practices, and mindsets that you can directly apply to your real world development. You''ll also learn to spot weaknesses in legacy code and how to address them.
+::center::
+
+<!--
+
+Inspired by this book we decided to go for Domain Primitives as part of our secure architecture when building our next application
+
+-->
+
+---
+
+# What are Domain primitives?
+
+Let's dive in and set the context
+
+
+
 ---
 transition: slide-up
 
@@ -418,7 +426,6 @@ const renderPipeReport = async () => {
 ````
 
 <!--
-
 When rendering the report we are using the parameters and passing them on to the api for fetching data. 
 
 Without type checking this opens up for run-time errors and possibly invalid input 
@@ -440,15 +447,13 @@ Adding typechecking helps us make sure string and Guid is not interchanged. They
 This way we ensure that if getFromUrl() returns a string, we will have a compile-time error. 
 
 [click]
-Solution then is often just doing an explisit cast, and getFromUrl() can return a string again.
+What often happens is that we just do an explisit cast, and getFromUrl() can return a string again.
 
 Any validation of the type has to be done manually
 
 [click]
 Solution is defining a class
-
 -->
-
 
 ---
 transition: fade

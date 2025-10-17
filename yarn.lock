@@ -5733,6 +5733,26 @@ __metadata:
   languageName: node
   linkType: hard
 
+"playwright-chromium@npm:^1.56.1":
+  version: 1.56.1
+  resolution: "playwright-chromium@npm:1.56.1"
+  dependencies:
+    playwright-core: "npm:1.56.1"
+  bin:
+    playwright: cli.js
+  checksum: 10c0/af6de0715c1614e8bc9f60f7a1fced3e93623843226802e4301e33562abe8dccb282a9d9cde8bfcd1b5efa96bea9861c70f37eddfeed3df96dedabe139bf5f4d
+  languageName: node
+  linkType: hard
+
+"playwright-core@npm:1.56.1":
+  version: 1.56.1
+  resolution: "playwright-core@npm:1.56.1"
+  bin:
+    playwright-core: cli.js
+  checksum: 10c0/ffd40142b99c68678b387445d5b42f1fee4ab0b65d983058c37f342e5629f9cdbdac0506ea80a0dfd41a8f9f13345bad54e9a8c35826ef66dc765f4eb3db8da7
+  languageName: node
+  linkType: hard
+
 "points-on-curve@npm:0.2.0, points-on-curve@npm:^0.2.0":
   version: 0.2.0
   resolution: "points-on-curve@npm:0.2.0"
@@ -6198,6 +6218,7 @@ __metadata:
     "@slidev/cli": "npm:^51.1.0"
     "@slidev/theme-default": "npm:latest"
     "@slidev/theme-seriph": "npm:latest"
+    playwright-chromium: "npm:^1.56.1"
     vue: "npm:^3.5.13"
   languageName: unknown
   linkType: soft
